@@ -1,6 +1,5 @@
-package com.example.restaurantsapp.ui.Screens
+package com.example.restaurantsapp.ui.screens.restaurantComponents
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
