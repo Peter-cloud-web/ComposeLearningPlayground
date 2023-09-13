@@ -10,7 +10,9 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun RestaurantDetails(title: String, description: String, modifier: Modifier) {
     Column(modifier = modifier) {
-        Text(text = title, style = MaterialTheme.typography.bodyLarge)
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyLarge)
 
         Text(
             text = description,

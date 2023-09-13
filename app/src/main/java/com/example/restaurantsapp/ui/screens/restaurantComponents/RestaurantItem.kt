@@ -40,7 +40,6 @@ fun RestaurantItem(item: Restaurant) {
 }
 
 val sampleData = Restaurant(1,"Gallitos","We serve exquisite meals")
-
 @Preview(showBackground = true)
 @Composable
 fun RestaurantItemPreview() {
