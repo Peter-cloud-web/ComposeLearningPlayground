@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.restaurantsapp.data.model.RestaurantResponse
 import com.example.restaurantsapp.ui.screens.restaurantComponents.RestaurantItem
 import com.example.restaurantsapp.viewModel.RestaurantViewModel
