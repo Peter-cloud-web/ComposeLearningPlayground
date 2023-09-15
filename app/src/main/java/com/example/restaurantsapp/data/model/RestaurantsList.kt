@@ -1,6 +1,5 @@
 package com.example.restaurantsapp.data.model
 
-object RestaurantsList {
     val restaurantList = listOf(
         Restaurant(1,"Gallitos","We serve exquisite meals"),
         Restaurant(2,"Chaibos","We serve exquisite meals"),
@@ -22,4 +21,3 @@ object RestaurantsList {
         Restaurant(17,"Chitos","We serve exquisite meals"),
         Restaurant(18,"Marvels","We serve exquisite meals")
     )
-}

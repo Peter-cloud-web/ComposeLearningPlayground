@@ -12,7 +12,8 @@ fun RestaurantDetails(title: String, description: String, modifier: Modifier) {
     Column(modifier = modifier) {
         Text(
             text = title,
-            style = MaterialTheme.typography.bodyLarge)
+            style = MaterialTheme.typography.bodyLarge
+        )
 
         Text(
             text = description,

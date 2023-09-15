@@ -5,19 +5,17 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
-import com.example.restaurantsapp.data.model.RestaurantResponse
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.restaurantsapp.ui.screens.restaurantComponents.RestaurantItem
 import com.example.restaurantsapp.viewModel.RestaurantViewModel
 
 
 @Composable
-fun RestaurantScreen(restaurantResponse: RestaurantResponse) {
+fun RestaurantScreen() {
 
-    val viewModel = remember {
-        RestaurantViewModel(restaurantResponse)
-    }
+    val viewModel : RestaurantViewModel = viewModel()
+
     LazyColumn(
         contentPadding = PaddingValues(
             vertical = 8.dp,
