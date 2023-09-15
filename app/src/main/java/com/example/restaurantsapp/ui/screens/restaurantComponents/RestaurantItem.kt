@@ -22,9 +22,6 @@ import com.example.restaurantsapp.ui.screens.restaurantComponents.Icons.PlaceIco
 @Composable
 fun RestaurantItem(item: Restaurant, onClick: (id: Int) -> Unit) {
 
-    val favouriteState = remember {
-        mutableStateOf(false)
-    }
     val icon = if (item.isFavourite)
         Icons.Filled.Favorite
     else
