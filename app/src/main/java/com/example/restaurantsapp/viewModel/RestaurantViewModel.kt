@@ -24,6 +24,13 @@ class RestaurantViewModel(
         restInterface = retrofit.create(RestaurantApiService::class.java)
     }
 
+    fun getRestaurants(){
+        restInterface.getRestaurants().execute().body()
+            ?.let { restaurants ->
+                state.value = restaurants.restoreSelections()
+            }
+    }
+
 
     fun toggleFavourite(id: Int) {
         val restaurants = state.value.toMutableList()
