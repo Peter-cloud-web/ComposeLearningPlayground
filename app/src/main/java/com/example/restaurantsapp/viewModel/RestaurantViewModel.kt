@@ -5,7 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.restaurantsapp.api.RestaurantApiService
 import com.example.restaurantsapp.data.model.Restaurant
-import com.example.restaurantsapp.data.model.restaurantList
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -17,18 +19,30 @@ class RestaurantViewModel(
     val state = mutableStateOf(emptyList<Restaurant>())
 
     init {
-        val retrofit:Retrofit = Retrofit.Builder()
+        val retrofit: Retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://restaurantsapp-25e2a-default-rtdb.firebaseio.com/")
             .build()
         restInterface = retrofit.create(RestaurantApiService::class.java)
     }
 
-    fun getRestaurants(){
-        restInterface.getRestaurants().execute().body()
-            ?.let { restaurants ->
-                state.value = restaurants.restoreSelections()
-            }
+    fun getRestaurants() {
+        restInterface.getRestaurants().enqueue(
+            object : Callback<List<Restaurant>> {
+                override fun onResponse(
+                    call: Call<List<Restaurant>>,
+                    response: Response<List<Restaurant>>
+                ) {
+                    response.body()?.let { restaurant ->
+                        state.value = restaurant.restoreSelections()
+                    }
+                }
+
+                override fun onFailure(call: Call<List<Restaurant>>, t: Throwable) {
+                    t.printStackTrace()
+                }
+
+            })
     }
 
 
@@ -55,7 +69,7 @@ class RestaurantViewModel(
 
         stateHandle.get<List<Int>?>(FAVORITES)?.let { selectedIds ->
 
-            val restaurantMap = this.associateBy {it.id}
+            val restaurantMap = this.associateBy { it.id }
 
             selectedIds.forEach { id ->
                 restaurantMap[id]?.isFavourite = true
@@ -70,4 +84,5 @@ class RestaurantViewModel(
     }
 
 
+}
 }
