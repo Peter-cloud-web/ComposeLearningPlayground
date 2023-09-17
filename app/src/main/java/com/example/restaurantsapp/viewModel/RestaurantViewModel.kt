@@ -17,6 +17,7 @@ class RestaurantViewModel(
 
     private var restInterface: RestaurantApiService
     val state = mutableStateOf(emptyList<Restaurant>())
+    private lateinit var restaurantsCall:Call<List<Restaurant>>
 
     init {
         val retrofit: Retrofit = Retrofit.Builder()
@@ -24,10 +25,13 @@ class RestaurantViewModel(
             .baseUrl("https://restaurantsapp-25e2a-default-rtdb.firebaseio.com/")
             .build()
         restInterface = retrofit.create(RestaurantApiService::class.java)
+
+        getRestaurants()
     }
 
-    fun getRestaurants() {
-        restInterface.getRestaurants().enqueue(
+    private fun getRestaurants() {
+        restaurantsCall = restInterface.getRestaurants()
+        restaurantsCall.enqueue(
             object : Callback<List<Restaurant>> {
                 override fun onResponse(
                     call: Call<List<Restaurant>>,
@@ -43,6 +47,11 @@ class RestaurantViewModel(
                 }
 
             })
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        restaurantsCall.cancel()
     }
 
 
@@ -82,7 +91,4 @@ class RestaurantViewModel(
     companion object {
         const val FAVORITES = "favorites"
     }
-
-
-}
 }
