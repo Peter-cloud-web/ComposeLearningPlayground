@@ -24,6 +24,7 @@ class RestaurantViewModel(
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://restaurantsapp-25e2a-default-rtdb.firebaseio.com/")
             .build()
+
         restInterface = retrofit.create(RestaurantApiService::class.java)
 
         getRestaurants()
