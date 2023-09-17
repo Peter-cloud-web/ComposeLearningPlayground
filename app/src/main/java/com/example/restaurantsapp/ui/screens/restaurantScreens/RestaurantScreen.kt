@@ -15,6 +15,7 @@ import com.example.restaurantsapp.viewModel.RestaurantViewModel
 fun RestaurantScreen() {
 
     val viewModel : RestaurantViewModel = viewModel()
+    viewModel.getRestaurants()
 
     LazyColumn(
         contentPadding = PaddingValues(

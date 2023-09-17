@@ -14,7 +14,7 @@ class RestaurantViewModel(
 ) : ViewModel() {
 
     private var restInterface: RestaurantApiService
-    val state = mutableStateOf(restaurantList.restoreSelections())
+    val state = mutableStateOf(emptyList<Restaurant>())
 
     init {
         val retrofit:Retrofit = Retrofit.Builder()
