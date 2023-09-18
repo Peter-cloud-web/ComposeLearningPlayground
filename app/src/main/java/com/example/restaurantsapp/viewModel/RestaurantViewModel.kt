@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.restaurantsapp.api.RestaurantApiService
 import com.example.restaurantsapp.data.model.Restaurant
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,6 +25,10 @@ class RestaurantViewModel(
 
     private var restInterface: RestaurantApiService
     val state = mutableStateOf(emptyList<Restaurant>())
+    private val errorHandler = CoroutineExceptionHandler{ _,exception ->
+        exception.printStackTrace()
+
+    }
 
     init {
         val retrofit: Retrofit = Retrofit.Builder()
@@ -38,22 +43,16 @@ class RestaurantViewModel(
 
     private fun getRestaurants() {
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO + errorHandler) {
 
-            try{
                 restInterface.getRestaurants().let { restaurants ->
 
                     withContext(Dispatchers.Main){
                         state.value = restaurants.restoreSelections()
                     }
                 }
-            } catch (e:Exception){
-                e.printStackTrace()
             }
-
         }
-
-    }
 
     fun toggleFavourite(id: Int) {
         val restaurants = state.value.toMutableList()
