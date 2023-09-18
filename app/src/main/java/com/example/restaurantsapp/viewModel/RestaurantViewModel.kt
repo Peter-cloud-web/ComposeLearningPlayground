@@ -39,12 +39,18 @@ class RestaurantViewModel(
     private fun getRestaurants() {
 
         viewModelScope.launch(Dispatchers.IO) {
-            restInterface.getRestaurants().let { restaurants ->
 
-                withContext(Dispatchers.Main){
-                    state.value = restaurants.restoreSelections()
+            try{
+                restInterface.getRestaurants().let { restaurants ->
+
+                    withContext(Dispatchers.Main){
+                        state.value = restaurants.restoreSelections()
+                    }
                 }
+            } catch (e:Exception){
+                e.printStackTrace()
             }
+
         }
 
     }
