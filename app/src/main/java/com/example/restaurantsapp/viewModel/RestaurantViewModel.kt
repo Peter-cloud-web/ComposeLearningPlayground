@@ -10,6 +10,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,9 +39,13 @@ class RestaurantViewModel(
     }
 
     private fun getRestaurants() {
+
         scope.launch {
             restInterface.getRestaurants().let { restaurants ->
-                state.value = restaurants.restoreSelections()
+
+                withContext(Dispatchers.Main){
+                    state.value = restaurants.restoreSelections()
+                }
             }
         }
 
