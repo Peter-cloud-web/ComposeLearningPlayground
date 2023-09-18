@@ -43,16 +43,20 @@ class RestaurantViewModel(
 
     private fun getRestaurants() {
 
-        viewModelScope.launch(Dispatchers.IO + errorHandler) {
+        viewModelScope.launch(errorHandler) {
 
-                restInterface.getRestaurants().let { restaurants ->
+                getRemoteRestaurants().let { restaurants ->
+                    state.value = restaurants.restoreSelections()
 
-                    withContext(Dispatchers.Main){
-                        state.value = restaurants.restoreSelections()
-                    }
                 }
             }
         }
+
+    private suspend fun getRemoteRestaurants():List<Restaurant>{
+        return withContext(Dispatchers.IO){
+            restInterface.getRestaurants()
+        }
+    }
 
     fun toggleFavourite(id: Int) {
         val restaurants = state.value.toMutableList()
