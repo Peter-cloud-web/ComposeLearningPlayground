@@ -24,8 +24,6 @@ class RestaurantViewModel(
 
     private var restInterface: RestaurantApiService
     val state = mutableStateOf(emptyList<Restaurant>())
-    val job = Job()
-    private val scope = CoroutineScope(job + Dispatchers.IO)
 
     init {
         val retrofit: Retrofit = Retrofit.Builder()
@@ -40,7 +38,7 @@ class RestaurantViewModel(
 
     private fun getRestaurants() {
 
-        scope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             restInterface.getRestaurants().let { restaurants ->
 
                 withContext(Dispatchers.Main){
@@ -82,11 +80,6 @@ class RestaurantViewModel(
             return restaurantMap.values.toList()
         }
         return this
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        job.cancel()
     }
 
     companion object {
