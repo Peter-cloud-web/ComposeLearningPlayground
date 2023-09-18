@@ -3,8 +3,13 @@ package com.example.restaurantsapp.viewModel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.restaurantsapp.api.RestaurantApiService
 import com.example.restaurantsapp.data.model.Restaurant
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -17,7 +22,8 @@ class RestaurantViewModel(
 
     private var restInterface: RestaurantApiService
     val state = mutableStateOf(emptyList<Restaurant>())
-    private lateinit var restaurantsCall:Call<List<Restaurant>>
+    val job = Job()
+    private val scope = CoroutineScope(job + Dispatchers.IO)
 
     init {
         val retrofit: Retrofit = Retrofit.Builder()
@@ -31,30 +37,13 @@ class RestaurantViewModel(
     }
 
     private fun getRestaurants() {
-        restaurantsCall = restInterface.getRestaurants()
-        restaurantsCall.enqueue(
-            object : Callback<List<Restaurant>> {
-                override fun onResponse(
-                    call: Call<List<Restaurant>>,
-                    response: Response<List<Restaurant>>
-                ) {
-                    response.body()?.let { restaurant ->
-                        state.value = restaurant.restoreSelections()
-                    }
-                }
+        scope.launch {
+            restInterface.getRestaurants().let { restaurants ->
+                state.value = restaurants.restoreSelections()
+            }
+        }
 
-                override fun onFailure(call: Call<List<Restaurant>>, t: Throwable) {
-                    t.printStackTrace()
-                }
-
-            })
     }
-
-    override fun onCleared() {
-        super.onCleared()
-        restaurantsCall.cancel()
-    }
-
 
     fun toggleFavourite(id: Int) {
         val restaurants = state.value.toMutableList()
@@ -87,6 +76,11 @@ class RestaurantViewModel(
             return restaurantMap.values.toList()
         }
         return this
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
     }
 
     companion object {
