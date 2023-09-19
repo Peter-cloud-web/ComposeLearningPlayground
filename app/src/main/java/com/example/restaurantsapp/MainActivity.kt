@@ -41,6 +41,9 @@ class MainActivity : ComponentActivity() {
             composable(route = "restaurants"){
                 RestaurantScreen()
             }
+            composable(route = "restaurants/{restaurant_id}"){
+                RestaurantDetailsScreen()
+            }
 
         }
 
