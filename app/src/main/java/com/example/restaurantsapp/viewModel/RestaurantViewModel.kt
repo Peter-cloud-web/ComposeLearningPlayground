@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.restaurantsapp.api.RestaurantApiService
 import com.example.restaurantsapp.data.model.Restaurant
+import com.example.restaurantsapp.util.FIREBASE_URL
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +34,7 @@ class RestaurantViewModel(
     init {
         val retrofit: Retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://restaurantsapp-25e2a-default-rtdb.firebaseio.com/")
+            .baseUrl(FIREBASE_URL)
             .build()
 
         restInterface = retrofit.create(RestaurantApiService::class.java)
