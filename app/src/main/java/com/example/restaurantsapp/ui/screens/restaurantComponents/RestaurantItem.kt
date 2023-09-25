@@ -1,6 +1,7 @@
 package com.example.restaurantsapp.ui.screens.restaurantComponents
 
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,7 +18,10 @@ import com.example.restaurantsapp.ui.screens.restaurantComponents.Icons.Favorite
 import com.example.restaurantsapp.ui.screens.restaurantComponents.Icons.PlaceIcon
 
 @Composable
-fun RestaurantItem(item: Restaurant, onClick: (id: Int) -> Unit) {
+fun RestaurantItem(
+    item: Restaurant,
+    onFavoriteClick: (id: Int) -> Unit,
+    onItemClick: (id: Int) -> Unit) {
 
     val icon = if (item.isFavourite)
         Icons.Filled.Favorite
@@ -25,7 +29,9 @@ fun RestaurantItem(item: Restaurant, onClick: (id: Int) -> Unit) {
         Icons.Filled.FavoriteBorder
 
     Card(
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable { onItemClick(item.id) },
     ) {
         Row(
             modifier = Modifier
@@ -43,7 +49,7 @@ fun RestaurantItem(item: Restaurant, onClick: (id: Int) -> Unit) {
             )
 
             FavoriteIcon(icon = icon, modifier = Modifier.padding(8.dp)) {
-                onClick(item.id)
+                onFavoriteClick(item.id)
             }
 
         }

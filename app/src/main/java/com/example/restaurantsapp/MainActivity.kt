@@ -9,9 +9,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.restaurantsapp.ui.screens.restaurantDetail.RestaurantDetailsScreen
 import com.example.restaurantsapp.ui.screens.restaurantScreens.RestaurantScreen
 import com.example.restaurantsapp.ui.theme.RestaurantsAppTheme
@@ -26,8 +28,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    RestaurantScreen()
-//                    RestaurantDetailsScreen()
                     RestaurantApp()
                 }
             }
@@ -39,9 +39,17 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         NavHost(navController, startDestination = "restaurants" ){
             composable(route = "restaurants"){
-                RestaurantScreen()
+                RestaurantScreen{id ->
+                    navController.navigate("restaurants/$id")
+                }
             }
-            composable(route = "restaurants/{restaurant_id}"){
+            composable(route = "restaurants/{restaurant_id}",
+            arguments = listOf(navArgument("restaurant_id"){
+              type = NavType.IntType
+            })
+
+            ) { navStackEntry ->
+                val id = navStackEntry.arguments?.getInt("restaurant_id")
                 RestaurantDetailsScreen()
             }
 
