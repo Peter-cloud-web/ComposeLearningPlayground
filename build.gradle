@@ -1,5 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    ext{
+        DaggerHilt = '2.4.7'
+        Coil = '2.4.0'
+        Material3 = '1.2.0-alpha07'
+    }
     repositories {
         google()
         mavenCentral()
