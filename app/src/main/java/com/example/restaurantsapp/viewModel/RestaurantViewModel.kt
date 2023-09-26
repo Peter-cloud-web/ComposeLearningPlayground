@@ -1,11 +1,14 @@
 package com.example.restaurantsapp.viewModel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.restaurantsapp.RestaurantsApplication
 import com.example.restaurantsapp.api.RestaurantApiService
 import com.example.restaurantsapp.data.model.Restaurant
+import com.example.restaurantsapp.db.room.RestaurantDb
 import com.example.restaurantsapp.util.FIREBASE_URL
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -24,6 +27,7 @@ class RestaurantViewModel(
     private val stateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private var restaurantDao = RestaurantDb.getDaoInstance(RestaurantsApplication.getAppContext())
     private var restInterface: RestaurantApiService
     val state = mutableStateOf(emptyList<Restaurant>())
     private val errorHandler = CoroutineExceptionHandler{ _,exception ->
@@ -43,19 +47,19 @@ class RestaurantViewModel(
     }
 
     private fun getRestaurants() {
-
         viewModelScope.launch(errorHandler) {
-
                 getRemoteRestaurants().let { restaurants ->
-                    state.value = restaurants.restoreSelections()
-
+                    state.value = restaurants
                 }
             }
         }
 
     private suspend fun getRemoteRestaurants():List<Restaurant>{
         return withContext(Dispatchers.IO){
-            restInterface.getRestaurants()
+            val restaurants = restInterface.getRestaurants()
+            Log.d("VIEW MODEL :","$restaurants")
+//            restaurantDao.addAll(restaurants)
+            return@withContext restaurants
         }
     }
 
